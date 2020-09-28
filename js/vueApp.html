@@ -1,0 +1,24 @@
+<script>
+	Vue.use(VueMaterial.default);
+	google.script.run
+		.withSuccessHandler((appData) => {
+			const { app, assets } = JSON.parse(appData);
+			data.app = app;
+            data.assets = assets;
+            console.log(data)
+			new Vue({
+                el: "#app",
+				data,
+				methods,
+				computed,
+			})
+		})
+		.withFailureHandler((error) => {
+			data.loadingError = error.message;
+			new Vue({
+                el: "#app",
+				data,
+			})
+		})
+        .getAppData()
+</script>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<base target="_top" />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/vue-material/dist/vue-material.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/vue-material/dist/theme/default.css"
+		/>
+		<?!= include("css/cloak.html") ?>
+		<?!= include("css/main.html") ?>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<?!= include("html/app.html") ?>
+		</div>
+		<script src="https://unpkg.com/vue"></script>
+		<script src="https://unpkg.com/vue-material"></script>
+		<?!= include("js/vueMethods.html") ?>
+		<?!= include("js/vueObjects.html") ?>
+		<?!= include("js/vueApp.html") ?>
+	</body>
+</html>

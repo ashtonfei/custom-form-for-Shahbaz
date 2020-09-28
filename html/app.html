@@ -1,0 +1,14 @@
+<template>
+    <div class="md-layout">
+        <div class="md-layout-item md-size-20 md-xsmall-hide"></div>
+        <div 
+            class="md-layout-item md-size-60 md-xsmall-size-100 md-card app-container"
+            v-if="loadingError">{{loadingError}}</div>
+        <div class="md-layout-item md-size-60 md-xsmall-size-100 md-card app-container" v-else>
+            <div class="md-title">{{app.name}}</div>
+            <?!= include("html/signIn.html") ?>
+            <?!= include("html/form.html") ?>
+        </div>
+        <div class="md-layout-item md-size-20 md-xsmall-hide"></div>
+    </div>
+</template>

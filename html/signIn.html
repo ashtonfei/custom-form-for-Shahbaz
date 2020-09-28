@@ -1,0 +1,28 @@
+<template v-if="!user">
+<div class="md-card-content">
+<form @submit.prevent="signIn">
+    <div class="md-title">{{signInForm.title}}</div>
+    <md-field>
+        <md-icon>{{assets.email.icon}}</md-icon>
+        <label>{{assets.email.label}}</label>
+        <md-input 
+            v-model.tirm="signInForm.email.value"
+            type="email"
+            required />
+    </md-field>
+    <md-field>
+        <md-icon>{{assets.password.icon}}</md-icon>
+        <label>{{assets.password.label}}</label>
+        <md-input 
+            v-model.tirm="signInForm.password.value"
+            type="password"
+            required />
+    </md-field>
+    <div>
+        <md-button class="md-raised md-primary" type="submit">{{signInForm.title}}</md-button>
+    </div>
+</form>
+</div>
+</template>
+
+

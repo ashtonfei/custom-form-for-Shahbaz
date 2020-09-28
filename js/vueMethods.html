@@ -1,0 +1,46 @@
+<script>
+	const goToSession = function (session = "home") {
+		this.session = session;
+	};
+    
+    const resetSignInForm = function () {
+        const formData = {
+            email: {
+                value: "",
+                valid: null,
+                error: null,
+            },
+            password: {
+                value: "",
+                valid: null,
+                error: null,
+            },
+            valid: null,
+            title: "Sign in",
+        }
+        this.signInForm = formData
+        return formData
+    }
+    
+    const signIn = function(){
+        this.submitting = true
+        const email = this.signInForm.email.value
+        const password = this.signInForm.password.value
+        
+        google.script.run
+            .withSuccessHandler( (user) => {
+                user = JSON.parse(user)
+                this.user = user
+                this.submitting = false
+            })
+            .withFailureHandler( (error) => {
+                this.showError(error.message)
+            })
+            .signIn({email, password})
+    }
+	const methods = {
+		goToSession,
+        resetSignInForm,
+        signIn,
+	};
+</script>
