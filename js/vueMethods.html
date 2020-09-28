@@ -3,6 +3,16 @@
 		this.session = session;
 	};
     
+    const showError = function (error) {
+        this.submitting = false
+        const dialogData = {
+            type: "error",
+            active: true,
+            content: error,
+        }
+        this.dialog = dialogData
+    }
+    
     const resetSignInForm = function () {
         const formData = {
             email: {
@@ -31,16 +41,41 @@
             .withSuccessHandler( (user) => {
                 user = JSON.parse(user)
                 this.user = user
-                this.submitting = false
+                if (user){
+                    this.resetSignInForm()
+                    this.submitting = false
+                }else{
+                    this.showError("Wrong email or password.")
+                }
             })
             .withFailureHandler( (error) => {
                 this.showError(error.message)
             })
             .signIn({email, password})
     }
+    
+    
+    const signOut = function(){
+        this.submitting = true
+        const user = JSON.stringify(this.user)
+        google.script.run
+            .withSuccessHandler( (user) => {
+                user = JSON.parse(user)
+                console.log(user)
+                this.user = user
+                this.submitting = false
+            })
+            .withFailureHandler( (error) => {
+                this.showError(error.message)
+            })
+            .signOut(user)
+    }
+    
 	const methods = {
 		goToSession,
+        showError,
         resetSignInForm,
         signIn,
+        signOut,
 	};
 </script>

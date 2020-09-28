@@ -1,6 +1,10 @@
 <template v-if="!user">
-<div class="md-card-content">
-<form @submit.prevent="signIn">
+<div class="md-card-content md-layout">
+<form 
+    @submit.prevent="signIn" 
+    class="md-layout-item md-size-50 md-xsmall-size-100"
+    :disabled="submitting"
+    >
     <div class="md-title">{{signInForm.title}}</div>
     <md-field>
         <md-icon>{{assets.email.icon}}</md-icon>
@@ -20,6 +24,9 @@
     </md-field>
     <div>
         <md-button class="md-raised md-primary" type="submit">{{signInForm.title}}</md-button>
+    </div>
+    <div>
+        <md-progress-bar md-mode="indeterminate" v-if="submitting"></md-progress-bar>
     </div>
 </form>
 </div>

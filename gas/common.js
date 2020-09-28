@@ -1,6 +1,7 @@
 // consts
 const SPREADSHEET_ID = "183JylbkMxNpPqii21ljh3VPlDl-By2T6wTv4p8CGRTM" // the google spreadsheet id as the database for the app
 const APP_NAME = "CUSTOM FORM FOR SHAHBAZ" // the name of your application
+const APP_DESCRIPTION = "This is a a form built with Google Apps Script for Shahbaz, you need to sign in to use it." 
 
 // database sheet
 const DB_USERS = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Users")
@@ -60,6 +61,10 @@ function createToken(email) {
     const expirationInSeconds = 6 * 60 * 60
     CacheService.getScriptCache().put(key, value, expirationInSeconds)
     return token
+}
+
+function destroyToken(token){
+    CacheService.getScriptCache().remove(token)
 }
 
 /**
