@@ -1,17 +1,21 @@
 <script>
+    const TOKEN = "_afei_gas_token"
+    
 	const goToSession = function (session = "home") {
 		this.session = session;
 	};
     
-    const showError = function (error) {
+    const showMessage = function (message, title="Message") {
         this.submitting = false
+        if (title === "Error") message = `<div class="red-text">${message}<\/div>`
         const dialogData = {
-            type: "error",
+            type: "message",
             active: true,
-            content: error,
+            content: message,
+            title: title,
         }
         this.dialog = dialogData
-    }
+    };
     
     const resetSignInForm = function () {
         const formData = {
@@ -44,12 +48,17 @@
                 if (user){
                     this.resetSignInForm()
                     this.submitting = false
+                    try{
+                        localStorage.setItem(TOKEN, user.token)
+                    } catch(e) {
+                        //pass
+                    }
                 }else{
-                    this.showError("Wrong email or password.")
+                    this.showMessage("Wrong email or password.", "Error")
                 }
             })
             .withFailureHandler( (error) => {
-                this.showError(error.message)
+                this.showMessage(error.message, "Error")
             })
             .signIn({email, password})
     }
@@ -61,21 +70,79 @@
         google.script.run
             .withSuccessHandler( (user) => {
                 user = JSON.parse(user)
-                console.log(user)
                 this.user = user
                 this.submitting = false
+                try{
+                    localStorage.removeItem(TOKEN)
+                } catch(e) {
+                    //pass
+                }
             })
             .withFailureHandler( (error) => {
-                this.showError(error.message)
+                this.showMessage(error.message, "Error")
             })
             .signOut(user)
     }
     
+    const resetForm = function () {
+        const formData = {
+            items:[],
+            valid: null,
+        }
+        this.form = formData
+        return formData
+    }
+    
+    const handleRelations = function (index) {
+        this.relations.forEach( (item, i) => {
+            if (i > index) item.value = ""
+        })
+    }
+    
+    const submitForm = function () {
+        this.submitting = true
+        const items = [...this.relations, ...this.form]
+        const headers = []
+        const values = []
+        items.forEach((item) => {
+            headers.push(item.label)
+            if (Array.isArray(item.value)) {
+                values.push(item.value.join(", "))
+            }else{
+                values.push(item.value)
+            }
+        })
+        
+        google.script.run
+            .withSuccessHandler( () => {
+                this.showMessage(this.app.confirmation)
+                const formItems = [...this.relations, ...this.form]
+                formItems.forEach(item => {
+                    if (Array.isArray(item.value)) {
+                        item.value = []
+                    }else if ( item.type === 'date' ) {
+                        item.value = null
+                    }else{
+                        item.value = ""
+                    }
+                })
+            })
+            .withFailureHandler( (error) => {
+                this.showMessage(error.message, "Error")
+            })
+            .submitForm(JSON.stringify({values, headers}))
+    }
+    
 	const methods = {
 		goToSession,
-        showError,
+        showMessage,
+        
         resetSignInForm,
         signIn,
         signOut,
+        
+        resetForm,
+        handleRelations,
+        submitForm,
 	};
 </script>

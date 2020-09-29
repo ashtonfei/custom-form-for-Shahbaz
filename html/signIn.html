@@ -9,7 +9,8 @@
     <md-field>
         <md-icon>{{assets.email.icon}}</md-icon>
         <label>{{assets.email.label}}</label>
-        <md-input 
+        <md-input
+            :disabled="submitting"
             v-model.tirm="signInForm.email.value"
             type="email"
             required />
@@ -17,13 +18,14 @@
     <md-field>
         <md-icon>{{assets.password.icon}}</md-icon>
         <label>{{assets.password.label}}</label>
-        <md-input 
+        <md-input
+            :disabled="submitting"
             v-model.tirm="signInForm.password.value"
             type="password"
             required />
     </md-field>
     <div>
-        <md-button class="md-raised md-primary" type="submit">{{signInForm.title}}</md-button>
+        <md-button class="md-raised md-primary" type="submit" :disabled="submitting">{{signInForm.title}}</md-button>
     </div>
     <div>
         <md-progress-bar md-mode="indeterminate" v-if="submitting"></md-progress-bar>

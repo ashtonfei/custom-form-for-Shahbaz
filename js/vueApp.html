@@ -1,11 +1,22 @@
 <script>
 	Vue.use(VueMaterial.default);
+    
+    
+    let token = null
+    try {
+        token = localStorage.getItem(TOKEN)
+    } catch(e) {
+        //pass
+    }
 	google.script.run
 		.withSuccessHandler((appData) => {
-			const { app, assets } = JSON.parse(appData);
+			const { app, assets, user, form, relations } = JSON.parse(appData);
 			data.app = app;
             data.assets = assets;
-            console.log(data)
+            data.user = user;
+            data.form = form;
+            data.relations = relations;
+            
 			new Vue({
                 el: "#app",
 				data,
@@ -20,5 +31,5 @@
 				data,
 			})
 		})
-        .getAppData()
+        .getAppData(token)
 </script>

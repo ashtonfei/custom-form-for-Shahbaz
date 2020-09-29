@@ -1,7 +1,7 @@
-<template v-if=" dialog.type === 'error' ">
+<template v-if=" dialog.type === 'message' ">
     <md-dialog-alert
         :md-active.sync="dialog.active"
-        md-title="Error"
+        :md-title="dialog.title"
         :md-content="dialog.content" 
     />
 </template>

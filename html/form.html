@@ -1,5 +1,96 @@
 <template v-if="user">
-<div>Form</div>
+<div class="md-card-content md-layout">
+<form 
+    @submit.prevent="submitForm" 
+    class="md-layout-item md-size-100"
+    :disabled="submitting"
+    >
+    
+    <div v-for=" (item, index) in relations "
+            :key=" 'form-relation-item-' + index ">
+        <md-field v-if=" index === 0 ">
+            <md-icon class="md-primary">{{item.icon}}</md-icon>
+            <label>{{item.label}}</label>
+            <md-select 
+                v-model="item.value" 
+                :required="item.required"
+                @md-selected="handleRelations(index)"
+                :disabled="submitting"
+            >
+                <md-option 
+                    v-for=" (option, i) in item.options "
+                    :key=" 'option-' + i"
+                    :value="option"
+                >{{option}}</md-option>
+            </md-select>
+        </md-field>
+        
+        <template v-else>
+            <md-field >
+                <md-icon class="md-primary">{{item.icon}}</md-icon>
+                <label>{{item.label}}</label>
+                <md-select 
+                    :disabled="!relations[index - 1].value || submitting"
+                    v-model="item.value" 
+                    :required="item.required"
+                    @md-selected="handleRelations(index)">
+                    <md-option 
+                        v-for=" (option, i) in relations[index - 1].kids[(index-1) + '_kid_' + relations[index - 1].value] "
+                        :key=" 'option-' + i "
+                        :value="option"
+                    >{{option}}</md-option>
+                </md-select>
+            </md-field>
+        </template>
+    </div>
+    <div 
+        v-for=" (item, index) in form "
+        :key=" 'form-item-' + index ">
+        <md-datepicker v-if=" item.type === 'date' "
+            v-model.tirm="item.value"
+            :required="item.required"
+            :disabled="submitting"
+            >
+            <label>{{item.label}}</label>
+        </md-datepicker>
+        
+        <md-field v-else-if=" item.type === 'single' || item.type === 'multiple' ">
+            <md-icon>{{item.icon}}</md-icon>
+            <label>{{item.label}}</label>
+            <md-select 
+                v-model="item.value" 
+                :required="item.required"
+                @md-selected="handleRelations(index)"
+                :multiple=" item.type === 'multiple' "
+                :disabled="submitting"
+            >
+                <md-option 
+                    v-for=" (option, i) in item.options "
+                    :key=" 'option-' + i"
+                    :value="option"
+                >{{option}}</md-option>
+            </md-select>
+        </md-field>
+        
+        <md-field v-else>
+            <md-icon>{{item.icon}}</md-icon>
+            <label>{{item.label}}</label>
+            <md-input 
+                v-model.tirm="item.value"
+                :type="item.type"
+                :required="item.required"
+                :disabled="submitting" />
+        </md-field>
+    </div>
+    
+    <div>
+        <md-button class="md-raised md-primary" type="submit" :disabled="submitting">Submit</md-button>
+    </div>
+    <div>
+        <md-progress-bar md-mode="indeterminate" v-if="submitting"></md-progress-bar>
+    </div>
+</form>
+</div>
 </template>
 
 
